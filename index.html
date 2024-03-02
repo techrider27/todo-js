@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Todo List by Gaurav Sangewar</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <style>
+      .list-none {
+        list-style: none;
+      }
+      .margin-right {
+        margin: 0 30px 0 0;
+      }
+      .todo {
+        text-align: left;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      class="
+        d-flex
+        justify-content-center
+        align-items-center
+        flex-column
+        vh-100
+      "
+    >
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6 mx-auto">
+            <div class="border border-primary rounded-4 h-100 py-4 px-3">
+              <h3 class="mb-3 text-center">Todo App</h3>
+              <div class="input-group mb-3">
+                <input
+                  type="text"
+                  class="form-control border-secondary"
+                  placeholder="Enter your todo"
+                  id="inputText"
+                />
+                <button
+                  class="mx-2 btn btn-primary"
+                  type="submit"
+                  id="btnClick"
+                >
+                  Submit
+                </button>
+              </div>
+              <div class="text-center">
+                <div class="display">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">Todo Name</th>
+                      </tr>
+                    </thead>
+                    <tbody id="records">
+                      <tr>
+                        <td class="todo">Gaurav Sangewar</td>
+                        <td>
+                          <i class="btn btn-danger text-white fa fa-trash"></i>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const selectingBtn = document.getElementById("btnClick");
+      const selectingInput = document.getElementById("inputText");
+      const recordsDisplay = document.getElementById("records");
+      let array = [];
+
+      let objString = localStorage.getItem("users");
+      if (objString != null) {
+        array = JSON.parse(objString);
+      }
+      displayInfo();
+      selectingBtn.addEventListener("click", () => {
+        const name = selectingInput.value;
+        array.push({ name: name });
+        saveInfo(array);
+        selectingInput.value = "";
+        displayInfo();
+      });
+
+      function saveInfo(array) {
+        let str = JSON.stringify(array);
+        localStorage.setItem("users", str);
+      }
+
+      function displayInfo() {
+        let displayArea = "";
+        array.forEach((user, i) => {
+          displayArea += `
+           <tr">
+                <td class="todo">${user.name}</td>
+                <td>
+                  <i class="btn btn-danger text-white fa fa-trash" onclick='deleteInfo(${i})'></i>
+                    </td>
+            </tr>
+          `;
+        });
+        recordsDisplay.innerHTML = displayArea;
+      }
+
+
+      function deleteInfo(id) {
+        array.splice(id, 1);
+        saveInfo(array);
+        displayInfo();
+      }
+    </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
